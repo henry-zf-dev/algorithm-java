@@ -1,5 +1,3 @@
-import org.omg.CORBA.Object;
-
 public class Array <E> {
 
     // 声明成员变量为私有，放置外部直接访问更改
@@ -44,11 +42,12 @@ public class Array <E> {
 
     // 在第 index 位置插入一个新的元素 e
     public void add(int index, E e) {
-        if (size == data.length) {
-            throw new IllegalArgumentException("AddLast failed. Array is already full.");
-        }
         if (index < 0 || index > size) {
             throw new IllegalArgumentException("AddLast failed. Require index >= 0 and index <= size.");
+        }
+        if (size == data.length) {
+            // 扩容的规模和数组当前的元素个数在同一个数量级
+            resize(2 * data.length);
         }
         for (int i = size - 1; i >= index; i--){
             // 数组元素后移
@@ -85,7 +84,7 @@ public class Array <E> {
     }
 
     // 查找数组中元素 e 所在的索引，如果不存在元素 e，则返回 -1
-    public int findIndex(E e) {
+    public int find(E e) {
         for (int i = 0; i < size; i++) {
             if (data[i].equals(e)) {
                 return i;
@@ -107,6 +106,11 @@ public class Array <E> {
         // 如果数组存储的是类对象，那么移除元素后需要将原来 index 指向的对象引用清空，以便垃圾回收
         // loitering objects 闲散对象，loitering objects != memory leak
         data[size] = null;
+
+        // 当减少元素个数到一定程度后，缩减数组容量
+        if (size == data.length / 4 && data.length / 2 != 0) {
+            resize(data.length / 2);
+        }
         return ret;
     }
 
@@ -122,7 +126,7 @@ public class Array <E> {
 
     // 从数组中删除元素 e
     public void removeElement(E e) {
-        int index = findIndex(e);
+        int index = find(e);
         if (index != -1) {
             remove(index);
         }
@@ -141,5 +145,14 @@ public class Array <E> {
         }
         res.append("]");
         return res.toString();
+    }
+
+    // 私有方法，扩容
+    private void resize(int newCapacity) {
+        E[] newData = (E[])new Object[newCapacity];
+        for (int i = 0; i < size; i++) {
+            newData[i] = data[i];
+        }
+        data = newData;
     }
 }
