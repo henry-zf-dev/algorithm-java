@@ -37,8 +37,7 @@ public class InsertionSort {
             // 先用一个临时变量暂存 arr[i]，再遍历 i 之前的所有元素，找出 arr[i] 应该存放的位置
             // 遍历过程中，只要比 arr[i] 大的元素，就全部向后平移一位，而不是每次都 swap
             E tmp = arr[i];
-            // 存放最终 arr[i] 需要放置的索引
-            int j;
+            int j; // 存放最终 arr[i] 需要放置的索引
             for (j = i; j > 0 && tmp.compareTo(arr[j - 1]) < 0; j--) {
                 arr[j] = arr[j - 1];
             }
