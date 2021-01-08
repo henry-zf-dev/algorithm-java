@@ -119,4 +119,29 @@ class SolutionWithDummyHead {
     }
 }
 
+// 使用递归函数
+class SolutionWithRecursion {
+    public ListNode removeElements(ListNode head, int val) {
+        // 求解最基本问题
+        if (head == null) {
+            return null;
+        }
+        // 删除头结点为 head.next 的链表中所有值为 val 的节点
+        // 得到的结果就是已经删除所有值为 val 的节点的更小的链表
+        // 通过递归调用 removeElements 实现了对链表的遍历
+        head.next = removeElements(head.next, val);
+        // 最后判断 head 本身是不是也需要被删除
+        // 链表节点的删除操作就发生在这一步，而且是从链表的最后一个节点开始判断删除逻辑
+        return head.val == val ? head.next : head;
+    }
 
+    public static void main(String[] args) {
+
+        int[] nums = {1, 2, 6, 3, 4, 5, 6};
+        ListNode head = new ListNode(nums);
+        System.out.println(head);
+
+        ListNode res = (new SolutionWithRecursion()).removeElements(head, 6);
+        System.out.println(res);
+    }
+}
